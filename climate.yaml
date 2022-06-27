@@ -1,0 +1,20 @@
+  - platform: smartir
+    name: Кондиционер спальня
+    unique_id: spall_ac
+    device_code: 1700
+    controller_data: remote.rm_pro_remote
+    temperature_sensor: sensor.0x158d0004859ac3_temperature
+  - platform: smartir
+    name: Кондиционер зал
+    unique_id: zall_ac
+    device_code: 1700
+    controller_data: remote.wi_fi_universal_zal_remote
+    temperature_sensor: sensor.0x158d000486e08c_temperature
+  - platform: smartir
+    name: Кондиционер гостиная
+    unique_id: gostin_ac
+    device_code: 1700
+    controller_data: remote.wi_fi_universal_gostinaia_remote
+    temperature_sensor: sensor.0x158d00048552d5_temperature
+  #  humidity_sensor: sensor.humidity
+  #  power_sensor: binary_sensor.ac_power

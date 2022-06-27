@@ -1,0 +1,2222 @@
+- id: '1602449311081'
+  alias: Превышение влажности ванная
+  description: ''
+  trigger:
+  - type: humidity
+    platform: device
+    device_id: 310e0550778006762abb75e52f93ed29
+    entity_id: sensor.0x158d0004859b0a_humidity
+    domain: sensor
+    above: 90
+  condition: []
+  action:
+  - type: turn_on
+    device_id: bd59dedd7afec387578becef19eef079
+    entity_id: switch.0x158d0004551ef0_channel_2
+    domain: switch
+  mode: single
+- id: '1602449404996'
+  alias: Норма влажности ванная
+  description: ''
+  trigger:
+  - type: humidity
+    platform: device
+    device_id: 310e0550778006762abb75e52f93ed29
+    entity_id: sensor.0x158d0004859b0a_humidity
+    domain: sensor
+    below: 89
+  condition: []
+  action:
+  - type: turn_off
+    device_id: bd59dedd7afec387578becef19eef079
+    entity_id: switch.0x158d0004551ef0_channel_2
+    domain: switch
+  mode: single
+- id: '1602578967263'
+  alias: Микроволновки выключается в 22:00
+  description: ''
+  trigger:
+  - platform: time
+    at: '22:00'
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 33d5efcdfa1d309124982b89ded86b03
+    entity_id: switch.mikrovolnovka
+    domain: switch
+  mode: single
+- id: '1602681494892'
+  alias: Микроволновка выключение
+  description: ''
+  trigger:
+  - type: power
+    platform: device
+    device_id: 33d5efcdfa1d309124982b89ded86b03
+    entity_id: sensor.mikrovolnovka_power
+    domain: sensor
+    below: 10
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+  condition: []
+  action:
+  - delay:
+      hours: 0
+      minutes: 20
+      seconds: 0
+      milliseconds: 0
+  - type: turn_off
+    device_id: 33d5efcdfa1d309124982b89ded86b03
+    entity_id: switch.mikrovolnovka
+    domain: switch
+  mode: single
+- id: '1603222643215'
+  alias: Свет прихожая выключается
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_off
+    device_id: ed761c64c6566ab58276a596af71cf5b
+    entity_id: light.0x158d000420e33c_light
+    domain: light
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 5b26f9d857c5301608f00670bce691ab
+    entity_id: light.0x158d000421a288_light
+    domain: light
+  mode: single
+- id: '1603463938841'
+  alias: Свет коридор выключается
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_off
+    device_id: 93a6333b2b37ddd44036e9d3a709020e
+    entity_id: light.0x158d00043121b5_light
+    domain: light
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 25d9d0ac7489197dfaf2f9f1159520f4
+    entity_id: light.0x158d0004040286_light
+    domain: light
+  mode: single
+- id: '1605024882972'
+  alias: Дом под охраной
+  description: ''
+  trigger:
+  - type: opened
+    platform: device
+    device_id: 4bf8f887399a7b9e269c4d59157e069c
+    entity_id: binary_sensor.0x158d0006c04934_contact
+    domain: binary_sensor
+  - type: opened
+    platform: device
+    device_id: f10299e8f9ef9a965b70a4c06556937e
+    entity_id: binary_sensor.0x158d00045c40e1_contact
+    domain: binary_sensor
+  - type: opened
+    platform: device
+    device_id: 3e696822df2aa0ea5ecefa9d5517b251
+    entity_id: binary_sensor.0x158d00053fb333_contact
+    domain: binary_sensor
+  - type: opened
+    platform: device
+    device_id: ae6d3ce59ef12dae8f06c164a4514527
+    entity_id: binary_sensor.0x158d00047dbb5f_contact
+    domain: binary_sensor
+  - type: opened
+    platform: device
+    device_id: 7e7353ebf9b8415546e0c0f62db65af3
+    entity_id: binary_sensor.okno_balkon_contact
+    domain: binary_sensor
+  condition:
+  - condition: state
+    entity_id: alarm_control_panel.home_alarm
+    state: armed_away
+  action:
+  - service: media_extractor.play_media
+    data:
+      media_content_id: http://192.168.1.100:8123/local/dingdong.mp3
+      media_content_type: MUSIC
+    target:
+      entity_id: media_player.ekran
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
+  - service: tts.reversotts_say
+    data:
+      entity_id: media_player.ekran
+      message: Здравствуйте. ВНИМАНИЕ!!! Охрана дома включена. Введите пожалуйсто
+        код деактивации.
+  - service: alarm_control_panel.alarm_trigger
+    data:
+      code: '5048'
+    target:
+      entity_id: alarm_control_panel.home_alarm
+  mode: restart
+- id: '1606464309672'
+  alias: Датчик протечки ванная начинает обнаруживать влагу
+  description: ''
+  trigger:
+  - type: moist
+    platform: device
+    device_id: 40dfae3d0f8bd61110f3df3e48a5fbe5
+    entity_id: binary_sensor.0x158d00049df2f4_moisture
+    domain: binary_sensor
+  condition: []
+  action:
+  - type: turn_off
+    device_id: f5088de956fe32f50abf9e1adac82c8d
+    entity_id: switch.kholodnaia_voda
+    domain: switch
+  - service: media_extractor.play_media
+    data:
+      media_content_id: http://192.168.1.100:8123/local/dingdong.mp3
+      media_content_type: MUSIC
+    target:
+      entity_id: media_player.ekran
+      device_id: 1a889b2913d3cf0829bb73f53f54df1c
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
+  - service: telegram_bot.send_message
+    data:
+      message: ВНИМАНИЕ!!! Датчик протечки ванная обнаружил влагу!!!
+  - service: telegram_bot.send_message
+    data:
+      message: ВНИМАНИЕ!!! Датчик протечки ванная обнаружил влагу!!!
+  - service: telegram_bot.send_message
+    data:
+      message: ВНИМАНИЕ!!! Датчик протечки ванная обнаружил влагу!!!
+  - service: tts.reversotts_say
+    data:
+      entity_id: media_player.ekran
+      message: ВНИМАНИЕ!!! Датчик протечки ванная обнаружил влагу!!!
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 3
+      milliseconds: 0
+  - service: media_player.play_media
+    target:
+      device_id: 1a889b2913d3cf0829bb73f53f54df1c
+    data:
+      media_content_id: ВНИМАНИЕ!!! Датчик протечки ванная обнаружил влагу!!!
+      media_content_type: text
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 3
+      milliseconds: 0
+  - service: tts.reversotts_say
+    data:
+      entity_id: media_player.ekran
+      message: ВНИМАНИЕ!!! Датчик протечки ванная обнаружил влагу!!!
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 3
+      milliseconds: 0
+  - service: tts.reversotts_say
+    data:
+      entity_id: media_player.ekran
+      message: ВНИМАНИЕ!!! Датчик протечки ванная обнаружил влагу!!!
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 3
+      milliseconds: 0
+  - service: media_extractor.play_media
+    data:
+      media_content_id: http://192.168.1.100:8123/local/alarm.mp3
+      media_content_type: MUSIC
+    target:
+      entity_id: media_player.ekran
+  mode: single
+- id: '1606729482121'
+  alias: Сработала ОХРАНА
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: alarm_control_panel.home_alarm
+    to: triggered
+  condition: []
+  action:
+  - service: media_extractor.play_media
+    data:
+      media_content_id: http://192.168.1.100:8123/local/alarm.mp3
+      media_content_type: MUSIC
+    target:
+      entity_id: media_player.ekran
+  - service: notify.andreu
+    data:
+      message: ВНИМАНИЕ!!! НАРУШЕНИЕ БЕЗОПАСНОСТИ ДОМА!!! ПРОНИКНОВЕНИЕ!!!
+  - service: notify.mobile_app_tania
+    data:
+      message: ВНИМАНИЕ!!! НАРУШЕНИЕ БЕЗОПАСНОСТИ ДОМА!!! ПРОНИКНОВЕНИЕ!!!
+  - service: telegram_bot.send_message
+    data:
+      message: ВНИМАНИЕ!!! НАРУШЕНИЕ БЕЗОПАСНОСТИ ДОМА!!! ПРОНИКНОВЕНИЕ!!!
+  - repeat:
+      while:
+      - condition: state
+        entity_id: alarm_control_panel.home_alarm
+        state: triggered
+      sequence:
+      - service: telegram_bot.send_message
+        data:
+          message: ВНИМАНИЕ!!! НАРУШЕНИЕ БЕЗОПАСНОСТИ ДОМА!!! ПРОНИКНОВЕНИЕ!!!
+      - service: notify.mobile_app_andrei
+        data:
+          message: ВНИМАНИЕ!!! НАРУШЕНИЕ БЕЗОПАСНОСТИ ДОМА!!! ПРОНИКНОВЕНИЕ!!!
+      - service: notify.mobile_app_tania
+        data:
+          message: ВНИМАНИЕ!!! НАРУШЕНИЕ БЕЗОПАСНОСТИ ДОМА!!! ПРОНИКНОВЕНИЕ!!!
+      - service: media_extractor.play_media
+        data:
+          media_content_id: http://192.168.1.100:8123/local/alarm.mp3
+          media_content_type: MUSIC
+        target:
+          entity_id: media_player.ekran
+  mode: restart
+  max: 10
+- id: '1607012514913'
+  alias: Бра спальня включается
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: 2b82646fa521fcce119094bd6cd6ed91
+    entity_id: switch.0x158d0005c1a9cf_channel_2
+    domain: switch
+  condition: []
+  action:
+  - type: turn_on
+    device_id: 74644b9f789028aabddda386811ba37d
+    entity_id: switch.pravyi_svet
+    domain: switch
+  - type: turn_on
+    device_id: 4d913f3e74ab7d47d8f613c3a972cd12
+    entity_id: switch.levyi_svet
+    domain: switch
+  mode: restart
+- id: '1607012551042'
+  alias: Бра спальня выключается
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_off
+    device_id: 2b82646fa521fcce119094bd6cd6ed91
+    entity_id: switch.0x158d0005c1a9cf_channel_2
+    domain: switch
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 74644b9f789028aabddda386811ba37d
+    entity_id: switch.pravyi_svet
+    domain: switch
+  - type: turn_off
+    device_id: 4d913f3e74ab7d47d8f613c3a972cd12
+    entity_id: switch.levyi_svet
+    domain: switch
+  mode: restart
+- id: '1607429993678'
+  alias: 'Свет прихожая: включить (ДЕНЬ)'
+  description: ''
+  trigger:
+  - type: motion
+    platform: device
+    device_id: 877cdab6b200df2da54b5ded2f598634
+    entity_id: binary_sensor.0x158d00045e9e93_motion_2
+    domain: binary_sensor
+  - type: motion
+    platform: device
+    device_id: 04cf842a3eb07a8ca73ef444c2fdb428
+    entity_id: binary_sensor.0x158d00045fc9ae_motion
+    domain: binary_sensor
+  - platform: device
+    type: turned_on
+    device_id: ed761c64c6566ab58276a596af71cf5b
+    entity_id: light.0x158d000420e33c_light
+    domain: light
+  condition:
+  - condition: time
+    after: 05:00
+    before: '23:00'
+  action:
+  - service: timer.cancel
+    data: {}
+    target:
+      entity_id:
+      - timer.vkliuchit_svet_koridor
+      - timer.vykliuchit_svet_koridor
+  - service: timer.start
+    data:
+      duration: '0'
+    target:
+      entity_id:
+      - timer.vkliuchit_svet_koridor
+  - type: turn_on
+    device_id: ed761c64c6566ab58276a596af71cf5b
+    entity_id: light.0x158d000420e33c_light
+    domain: light
+    brightness_pct: 100
+  - type: turn_on
+    device_id: 5b26f9d857c5301608f00670bce691ab
+    entity_id: light.0x158d000421a288_light
+    domain: light
+    brightness_pct: 100
+  - type: turn_on
+    device_id: 25d9d0ac7489197dfaf2f9f1159520f4
+    entity_id: light.0x158d0004040286_light
+    domain: light
+    brightness_pct: 100
+  - type: turn_on
+    device_id: 93a6333b2b37ddd44036e9d3a709020e
+    entity_id: light.0x158d00043121b5_light
+    domain: light
+    brightness_pct: 100
+  - wait_for_trigger:
+    - platform: state
+      entity_id: binary_sensor.super_motion
+      to: 'off'
+  - service: timer.start
+    data:
+      duration: '0'
+    target:
+      entity_id:
+      - timer.vykliuchit_svet_koridor
+  - wait_for_trigger:
+    - platform: state
+      to: idle
+      entity_id: timer.vykliuchit_svet_koridor
+  - type: turn_off
+    device_id: 25d9d0ac7489197dfaf2f9f1159520f4
+    entity_id: light.0x158d0004040286_light
+    domain: light
+  - type: turn_off
+    device_id: 93a6333b2b37ddd44036e9d3a709020e
+    entity_id: light.0x158d00043121b5_light
+    domain: light
+  - type: turn_off
+    device_id: ed761c64c6566ab58276a596af71cf5b
+    entity_id: light.0x158d000420e33c_light
+    domain: light
+  - type: turn_off
+    device_id: 5b26f9d857c5301608f00670bce691ab
+    entity_id: light.0x158d000421a288_light
+    domain: light
+  mode: restart
+  max: 100
+- id: '1607719386660'
+  alias: Режим экономии
+  description: выключение света через 1 час бездействия
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.super_motion
+    to: 'on'
+  - platform: state
+    entity_id: binary_sensor.super_motion_vannay
+    to: 'on'
+  - platform: device
+    type: turned_on
+    device_id: 5709abc85a3ac60ee607d81e0a49263a
+    entity_id: light.sonoff_01minizb_ee6dabfe_on_off
+    domain: light
+  - platform: device
+    type: turned_on
+    device_id: 8d971f2ce007941748c81ee2f93bc39f
+    entity_id: light.sonoff_01minizb_c06aabfe_on_off
+    domain: light
+  - platform: device
+    type: turned_on
+    device_id: bd59dedd7afec387578becef19eef079
+    entity_id: switch.0x158d0004551ef0_channel_1
+    domain: switch
+  - platform: device
+    type: turned_on
+    device_id: 6afaa73d1ba097c9467e82bc7fb80801
+    entity_id: light.sonoff_01minizb_0b5eabfe_on_off
+    domain: light
+  - platform: device
+    type: turned_on
+    device_id: 2623a799ad6ec766ea5e7c99d00b6c61
+    entity_id: light.sonoff_01minizb_3cb2a6fe_on_off
+    domain: light
+  - platform: device
+    type: turned_on
+    device_id: 4bc88753649c2679704cfc0fdbc951e0
+    entity_id: light.lumi_lumi_relay_c2acn01_afa9c105_on_off
+    domain: light
+  - platform: device
+    type: turned_on
+    device_id: 4bc88753649c2679704cfc0fdbc951e0
+    entity_id: light.lumi_lumi_relay_c2acn01_afa9c105_on_off_2
+    domain: light
+  - platform: device
+    type: turned_on
+    device_id: d2b1fc1f3e4242e14f95d3eab2ab1ff4
+    entity_id: light.sonoff_01minizb_54fca7fe_on_off
+    domain: light
+  - platform: device
+    type: turned_on
+    device_id: 93a6333b2b37ddd44036e9d3a709020e
+    entity_id: light.0x158d00043121b5_light
+    domain: light
+  - platform: device
+    type: turned_on
+    device_id: ed761c64c6566ab58276a596af71cf5b
+    entity_id: light.0x158d000420e33c_light
+    domain: light
+  - platform: device
+    type: turned_on
+    device_id: 10b0991365c3c138f244b62d8df511ca
+    entity_id: light.lumi_lumi_relay_c2acn01_cfa9c105_on_off
+    domain: light
+  - platform: device
+    type: turned_on
+    device_id: fc94a2026850d8bb573dc02afc4b3096
+    entity_id: switch.tyzb01_iuepbmpv_ts0121_5553acfe_on_off
+    domain: switch
+  - platform: device
+    type: turned_on
+    device_id: 69ba0a140ebbd561517d1f0f39bb62a9
+    entity_id: light.sonoff_01minizb_eb63abfe_on_off
+    domain: light
+  - platform: device
+    type: turned_on
+    device_id: ada68d711eaffbd9bc04172aff8e1df0
+    entity_id: switch.tz3000_g5xawfcq_ts0121_bb9213fe_on_off
+    domain: switch
+  - platform: device
+    type: turned_on
+    device_id: 92b207a051f8fc13f5e0b661f6471f3f
+    entity_id: light.sonoff_01minizb_e45babfe_on_off
+    domain: light
+  - platform: device
+    type: turned_on
+    device_id: 175bd6c89cdf533c02b2eabbe3b0609f
+    entity_id: light.sonoff01minizb_9867abfe_on_off
+    domain: light
+  - platform: device
+    type: turned_on
+    device_id: 258906729e844fb50628198e660f9313
+    entity_id: light.lumi_lumi_relay_c2acn01_on_off
+    domain: light
+  - type: opened
+    platform: device
+    device_id: 3912f707292654220a97b2163e89c6cf
+    entity_id: binary_sensor.0x158d00047db412_contact
+    domain: binary_sensor
+  - type: opened
+    platform: device
+    device_id: 674c0a4f7faab395088be5347424d2dc
+    entity_id: binary_sensor.lumi_lumi_sensor_magnet_aq2_e1405c04_on_off
+    domain: binary_sensor
+  - type: not_opened
+    platform: device
+    device_id: 3912f707292654220a97b2163e89c6cf
+    entity_id: binary_sensor.0x158d00047db412_contact
+    domain: binary_sensor
+  - type: not_opened
+    platform: device
+    device_id: 674c0a4f7faab395088be5347424d2dc
+    entity_id: binary_sensor.lumi_lumi_sensor_magnet_aq2_e1405c04_on_off
+    domain: binary_sensor
+  - type: opened
+    platform: device
+    device_id: e92b931d25bdeb1ac86fcb64a3a56387
+    entity_id: binary_sensor.okno_zal_contact
+    domain: binary_sensor
+  - type: not_opened
+    platform: device
+    device_id: e92b931d25bdeb1ac86fcb64a3a56387
+    entity_id: binary_sensor.okno_zal_contact
+    domain: binary_sensor
+  - type: opened
+    platform: device
+    device_id: e4a79bcdc07a416d08074fa3c69e5e51
+    entity_id: binary_sensor.lumi_lumi_sensor_magnet_aq2_5fbb7d04_on_off
+    domain: binary_sensor
+  - type: not_opened
+    platform: device
+    device_id: e4a79bcdc07a416d08074fa3c69e5e51
+    entity_id: binary_sensor.lumi_lumi_sensor_magnet_aq2_5fbb7d04_on_off
+    domain: binary_sensor
+  - platform: device
+    type: turned_on
+    device_id: 258906729e844fb50628198e660f9313
+    entity_id: light.lumi_lumi_relay_c2acn01_on_off_2
+    domain: light
+  condition: []
+  action:
+  - service: timer.cancel
+    data:
+      entity_id: timer.home_on
+    entity_id: timer.home_on
+  - service: timer.start
+    data:
+      duration: '0'
+    target:
+      entity_id: timer.home_on
+  - wait_for_trigger:
+    - platform: state
+      entity_id: timer.home_on
+      to: idle
+  - choose:
+    - conditions:
+      - condition: time
+        after: 08:00
+        before: '22:00'
+      sequence:
+      - service: tts.reversotts_say
+        data:
+          entity_id: media_player.ekran
+          message: Включаю режим экономиu
+    default:
+    - service: script.1613636511987
+  mode: restart
+- id: '1608278932766'
+  alias: Окно зал в открытом состоянии
+  description: ''
+  trigger:
+  - type: opened
+    platform: device
+    device_id: 3e696822df2aa0ea5ecefa9d5517b251
+    entity_id: binary_sensor.0x158d00053fb333_contact
+    domain: binary_sensor
+  condition: []
+  action:
+  - service: media_extractor.play_media
+    data:
+      media_content_id: http://192.168.1.100:8123/local/dingdong.mp3
+      media_content_type: MUSIC
+    target:
+      entity_id: media_player.ekran
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
+  - service: tts.reversotts_say
+    data:
+      entity_id: media_player.ekran
+      message: Окно в зале открыто
+  mode: restart
+- id: '1608278991603'
+  alias: Окно гостиная в открытом состоянии
+  description: ''
+  trigger:
+  - type: opened
+    platform: device
+    device_id: f10299e8f9ef9a965b70a4c06556937e
+    entity_id: binary_sensor.0x158d00045c40e1_contact
+    domain: binary_sensor
+  condition: []
+  action:
+  - service: media_extractor.play_media
+    data:
+      media_content_id: http://192.168.1.100:8123/local/dingdong.mp3
+      media_content_type: MUSIC
+    target:
+      entity_id: media_player.ekran
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
+  - service: tts.reversotts_say
+    data:
+      entity_id: media_player.ekran
+      message: Окно в гостиной открыта
+  mode: restart
+- id: '1608284007470'
+  alias: 'Окно кухня в открытом состоянии '
+  description: ''
+  trigger:
+  - type: opened
+    platform: device
+    device_id: ae6d3ce59ef12dae8f06c164a4514527
+    entity_id: binary_sensor.0x158d00047dbb5f_contact
+    domain: binary_sensor
+  condition: []
+  action:
+  - service: media_extractor.play_media
+    data:
+      media_content_id: http://192.168.1.100:8123/local/dingdong.mp3
+      media_content_type: MUSIC
+    target:
+      entity_id: media_player.ekran
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
+  - service: tts.reversotts_say
+    data:
+      entity_id: media_player.ekran
+      message: Окно в кухне открыто
+  mode: single
+- id: '1608413418620'
+  alias: Кнопка Охрана
+  description: Дом под охрану
+  trigger:
+  - platform: device
+    device_id: 66d3f3968ed3427c84dc42ccfed5f025
+    domain: xiaomi_gateway3
+    type: button
+    action: triple
+  condition: []
+  action:
+  - service: media_extractor.play_media
+    data:
+      media_content_id: http://192.168.1.100:8123/local/dingdong.mp3
+      media_content_type: MUSIC
+    target:
+      entity_id: media_player.ekran
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
+  - service: alarm_control_panel.alarm_arm_away
+    data:
+      code: '5048'
+    target:
+      entity_id:
+      - alarm_control_panel.home_alarm
+  - service: tts.reversotts_say
+    data:
+      entity_id: media_player.ekran
+      message: Внимание!!! Через 5 минут поставлю дом под охрану.
+  - wait_for_trigger:
+    - platform: state
+      entity_id: alarm_control_panel.home_alarm
+      to: armed_away
+  - service: tts.reversotts_say
+    data:
+      entity_id: media_player.ekran
+      message: Внимание!!! Дом под охраной. Досвидание.
+  - service: alarm_control_panel.alarm_arm_away
+    data: {}
+    target:
+      entity_id: alarm_control_panel.home_alarm
+  - service: script.1613636511987
+    data: {}
+  - service: notify.mobile_app_andrei
+    data:
+      message: Дом под охраной.
+  - service: notify.mobile_app_tania
+    data:
+      message: Дом под охраной.
+  - service: telegram_bot.send_message
+    data:
+      message: Дом под охраной.
+  - service: alarm_control_panel.alarm_arm_away
+    target:
+      device_id: c3ca897b6f52de87b2d9659566fbe0e2
+    data: {}
+  mode: restart
+- id: '1608414185608'
+  alias: Охрана выключена
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: alarm_control_panel.home_alarm
+    to: disarmed
+  condition: []
+  action:
+  - service: media_extractor.play_media
+    data:
+      media_content_id: http://192.168.1.100:8123/local/dingdong.mp3
+      media_content_type: MUSIC
+    target:
+      entity_id: media_player.ekran
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
+  - service: tts.reversotts_say
+    data:
+      entity_id: media_player.ekran
+      message: Внимание!!! Охрана выключена.
+  - service: alarm_control_panel.alarm_disarm
+    data: {}
+    target:
+      entity_id:
+      - alarm_control_panel.home_alarm
+  - service: alarm_control_panel.alarm_disarm
+    data: {}
+    target:
+      entity_id: alarm_control_panel.0x680ae2fffedca851_alarm
+  mode: restart
+- id: '1608927142256'
+  alias: 'Свет прихожая: включить (НОЧЬ)'
+  description: ''
+  trigger:
+  - type: motion
+    platform: device
+    device_id: 877cdab6b200df2da54b5ded2f598634
+    entity_id: binary_sensor.0x158d00045e9e93_motion_2
+    domain: binary_sensor
+  - type: motion
+    platform: device
+    device_id: 04cf842a3eb07a8ca73ef444c2fdb428
+    entity_id: binary_sensor.0x158d00045fc9ae_motion
+    domain: binary_sensor
+  condition:
+  - condition: time
+    after: '23:00'
+    before: 05:00
+  action:
+  - service: timer.cancel
+    data: {}
+    target:
+      entity_id:
+      - timer.vkliuchit_svet_koridor
+      - timer.vykliuchit_svet_koridor
+  - service: timer.start
+    data:
+      duration: '0'
+    target:
+      entity_id:
+      - timer.vkliuchit_svet_koridor
+  - type: turn_on
+    device_id: ed761c64c6566ab58276a596af71cf5b
+    entity_id: light.0x158d000420e33c_light
+    domain: light
+    brightness_pct: 30
+  - type: turn_on
+    device_id: 5b26f9d857c5301608f00670bce691ab
+    entity_id: light.0x158d000421a288_light
+    domain: light
+    brightness_pct: 30
+  - type: turn_on
+    device_id: 25d9d0ac7489197dfaf2f9f1159520f4
+    entity_id: light.0x158d0004040286_light
+    domain: light
+    brightness_pct: 30
+  - type: turn_on
+    device_id: 93a6333b2b37ddd44036e9d3a709020e
+    entity_id: light.0x158d00043121b5_light
+    domain: light
+    brightness_pct: 30
+  - wait_for_trigger:
+    - platform: state
+      entity_id: binary_sensor.super_motion
+      to: 'off'
+  - service: timer.start
+    data:
+      duration: '0'
+    target:
+      entity_id:
+      - timer.vykliuchit_svet_koridor
+  - wait_for_trigger:
+    - platform: state
+      to: idle
+      entity_id: timer.vykliuchit_svet_koridor
+  - type: turn_off
+    device_id: ed761c64c6566ab58276a596af71cf5b
+    entity_id: light.0x158d000420e33c_light
+    domain: light
+  - type: turn_off
+    device_id: 5b26f9d857c5301608f00670bce691ab
+    entity_id: light.0x158d000421a288_light
+    domain: light
+  - type: turn_off
+    device_id: 25d9d0ac7489197dfaf2f9f1159520f4
+    entity_id: light.0x158d0004040286_light
+    domain: light
+  - type: turn_off
+    device_id: 93a6333b2b37ddd44036e9d3a709020e
+    entity_id: light.0x158d00043121b5_light
+    domain: light
+  mode: restart
+  max: 100
+- id: '1610277577179'
+  alias: Датчик протечки кухня начинает обнаруживать влагу
+  description: ''
+  trigger:
+  - type: moist
+    platform: device
+    device_id: 10f22f7e9465ebf53649db720c18f2e6
+    entity_id: binary_sensor.0x158d00049de7c4_moisture
+    domain: binary_sensor
+  condition: []
+  action:
+  - type: turn_off
+    device_id: f5088de956fe32f50abf9e1adac82c8d
+    entity_id: switch.kholodnaia_voda
+    domain: switch
+  - service: media_extractor.play_media
+    data:
+      media_content_id: http://192.168.1.100:8123/local/dingdong.mp3
+      media_content_type: MUSIC
+    target:
+      entity_id: media_player.ekran
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
+  - service: telegram_bot.send_message
+    data:
+      message: ВНИМАНИЕ!!! Датчик протечки кухня обнаружил влагу!!!
+  - service: telegram_bot.send_message
+    data:
+      message: ВНИМАНИЕ!!! Датчик протечки кухня обнаружил влагу!!!
+  - service: telegram_bot.send_message
+    data:
+      message: ВНИМАНИЕ!!! Датчик протечки кухня обнаружил влагу!!!
+  - service: tts.reversotts_say
+    data:
+      entity_id: media_player.ekran
+      message: ВНИМАНИЕ!!! Датчик протечки кухня обнаружил влагу!!!
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 3
+      milliseconds: 0
+  - service: media_player.play_media
+    data:
+      media_content_id: ВНИМАНИЕ!!! Датчик протечки кухни обнаружил влагу!!!
+      media_content_type: text
+    target:
+      device_id: 1a889b2913d3cf0829bb73f53f54df1c
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 3
+      milliseconds: 0
+  - service: tts.reversotts_say
+    data:
+      entity_id: media_player.ekran
+      message: ВНИМАНИЕ!!! Датчик протечки кухня обнаружил влагу!!!
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 3
+      milliseconds: 0
+  - service: tts.reversotts_say
+    data:
+      entity_id: media_player.ekran
+      message: ВНИМАНИЕ!!! Датчик протечки кухня обнаружил влагу!!!
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 3
+      milliseconds: 0
+  - service: media_extractor.play_media
+    data:
+      media_content_id: http://192.168.1.100:8123/local/alarm.mp3
+      media_content_type: MUSIC
+    target:
+      entity_id: media_player.ekran
+  mode: single
+- id: '1611144320191'
+  alias: Вкл/Выкл TV спальня
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_button.on_off_samsung
+  condition: []
+  action:
+  - service: remote.send_command
+    data:
+      entity_id: remote.rm_pro_remote
+      device: samsung
+      command: ON/OFF
+      delay_secs: 20
+    entity_id: remote.rm_pro_remote
+  mode: single
+- id: '1614028452527'
+  alias: 'Свет в гардеробе включается '
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: 64de189d515756113eacab0fbcae26ce
+    entity_id: switch.svet_garderob_2
+    domain: switch
+  condition: []
+  action:
+  - service: timer.cancel
+    target:
+      entity_id: timer.vykliuchit_svet_garderob
+  - service: timer.start
+    data:
+      duration: '0'
+    target:
+      entity_id: timer.vykliuchit_svet_garderob
+  - wait_for_trigger:
+    - platform: state
+      entity_id: timer.vykliuchit_svet_garderob
+      to: idle
+  - type: turn_off
+    device_id: 64de189d515756113eacab0fbcae26ce
+    entity_id: switch.svet_garderob_2
+    domain: switch
+  mode: restart
+- id: '1615834837998'
+  alias: Режим экономии (Дублировать)
+  description: выключение света через 1 час бездействия
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.super_motion
+    to: 'on'
+  - platform: state
+    entity_id: binary_sensor.super_motion_vannay
+    to: 'on'
+  - platform: device
+    type: turned_on
+    device_id: e48bb86a0594921b650c62b4b792b216
+    entity_id: switch.levyi_svet_2
+    domain: switch
+  - platform: device
+    type: turned_on
+    device_id: 11431b3c6cbae820679c9262a02531c8
+    entity_id: switch.pravyi_svet_2
+    domain: switch
+  - platform: device
+    type: turned_on
+    device_id: bd59dedd7afec387578becef19eef079
+    entity_id: switch.0x158d0004551ef0_channel_1
+    domain: switch
+  - platform: device
+    type: turned_on
+    device_id: 64de189d515756113eacab0fbcae26ce
+    entity_id: switch.svet_garderob_2
+    domain: switch
+  - platform: device
+    type: turned_on
+    device_id: 3480bb3dd8744e3e7fa80cf75a30a4ce
+    entity_id: switch.svet_gostinaia_3
+    domain: switch
+  - platform: device
+    type: turned_on
+    device_id: 85fbd39071ab1310f5893b9312dd415b
+    entity_id: switch.0x158d0005c1a9af_channel_1
+    domain: switch
+  - platform: device
+    type: turned_on
+    device_id: 85fbd39071ab1310f5893b9312dd415b
+    entity_id: switch.0x158d0005c1a9af_channel_2
+    domain: switch
+  - platform: device
+    type: turned_off
+    device_id: 1674b7995324c92e81ec37ce8ddf84e2
+    entity_id: switch.svet_kladovaia_3
+    domain: switch
+  - platform: device
+    type: turned_on
+    device_id: 93a6333b2b37ddd44036e9d3a709020e
+    entity_id: light.0x158d00043121b5_light
+    domain: light
+  - platform: device
+    type: turned_on
+    device_id: ed761c64c6566ab58276a596af71cf5b
+    entity_id: light.0x158d000420e33c_light
+    domain: light
+  - platform: device
+    type: turned_on
+    device_id: dd16587abb79436e5f8b1236c6b0eef1
+    entity_id: switch.0x158d0005c12fa2_channel_1
+    domain: switch
+  - platform: device
+    type: turned_on
+    device_id: dd16587abb79436e5f8b1236c6b0eef1
+    entity_id: switch.0x158d0005c12fa2_channel_2
+    domain: switch
+  - platform: device
+    type: turned_on
+    device_id: 2b82646fa521fcce119094bd6cd6ed91
+    entity_id: switch.0x158d0005c1a9cf_channel_1
+    domain: switch
+  - platform: device
+    type: turned_on
+    device_id: 17f2a72e8cf07cbcf16681806975e604
+    entity_id: switch.svet_stolovaia_2
+    domain: switch
+  - platform: device
+    type: turned_on
+    device_id: a3e592bd3a09956342633488b8cf064b
+    entity_id: switch.svet_stolovaia_1_3
+    domain: switch
+  - platform: device
+    type: turned_on
+    device_id: 33d5efcdfa1d309124982b89ded86b03
+    entity_id: switch.mikrovolnovka
+    domain: switch
+  - platform: device
+    type: turned_on
+    device_id: 8003fa1121b5c084820215a8cbe3e70f
+    entity_id: switch.stiralnaia_mashina
+    domain: switch
+  - type: opened
+    platform: device
+    device_id: 3912f707292654220a97b2163e89c6cf
+    entity_id: binary_sensor.0x158d00047db412_contact
+    domain: binary_sensor
+  - type: opened
+    platform: device
+    device_id: f10299e8f9ef9a965b70a4c06556937e
+    entity_id: binary_sensor.0x158d00045c40e1_contact
+    domain: binary_sensor
+  - type: not_opened
+    platform: device
+    device_id: 3912f707292654220a97b2163e89c6cf
+    entity_id: binary_sensor.0x158d00047db412_contact
+    domain: binary_sensor
+  - type: opened
+    platform: device
+    device_id: 3e696822df2aa0ea5ecefa9d5517b251
+    entity_id: binary_sensor.0x158d00053fb333_contact
+    domain: binary_sensor
+  - type: opened
+    platform: device
+    device_id: ae6d3ce59ef12dae8f06c164a4514527
+    entity_id: binary_sensor.0x158d00047dbb5f_contact
+    domain: binary_sensor
+  - platform: device
+    type: turned_on
+    device_id: 1ac8b5a3c75c2f79b715de77068fa6ff
+    entity_id: switch.nochnik
+    domain: switch
+  condition: []
+  action:
+  - service: timer.cancel
+    data:
+      entity_id: timer.home_on
+    entity_id: timer.home_on
+  - service: timer.start
+    data:
+      duration: '0'
+    target:
+      entity_id: timer.home_on
+  - wait_for_trigger:
+    - platform: state
+      entity_id: timer.home_on
+      to: idle
+  - choose:
+    - conditions:
+      - condition: time
+        after: 08:00
+        before: '22:00'
+      sequence:
+      - service: media_extractor.play_media
+        data:
+          entity_id: media_player.ekran
+          media_content_id: http://192.168.1.100:8123/local/dingdong.mp3
+          media_content_type: audio/mp3
+      - service: tts.reversotts_say
+        data:
+          entity_id: media_player.ekran
+          message: Включаю режим экономии
+    - conditions:
+      - condition: time
+        after: '22:00'
+        before: 08:00
+      sequence:
+      - type: turn_off
+        device_id: ed761c64c6566ab58276a596af71cf5b
+        entity_id: light.0x158d000420e33c_light
+        domain: light
+      - type: turn_off
+        device_id: 93a6333b2b37ddd44036e9d3a709020e
+        entity_id: light.0x158d00043121b5_light
+        domain: light
+    default: []
+  - type: turn_off
+    device_id: ed761c64c6566ab58276a596af71cf5b
+    entity_id: light.0x158d000420e33c_light
+    domain: light
+  - type: turn_off
+    device_id: 5b26f9d857c5301608f00670bce691ab
+    entity_id: light.0x158d000421a288_light
+    domain: light
+  - type: turn_off
+    device_id: 93a6333b2b37ddd44036e9d3a709020e
+    entity_id: light.0x158d00043121b5_light
+    domain: light
+  - type: turn_off
+    device_id: 25d9d0ac7489197dfaf2f9f1159520f4
+    entity_id: light.0x158d0004040286_light
+    domain: light
+  mode: restart
+- id: '1615843218071'
+  alias: Отправить снимок камеры при обнаружении движения
+  description: ''
+  use_blueprint:
+    path: vorion/send-camera-snapshot-notification-on-motion.yaml
+    input:
+      motion_sensor: binary_sensor.0x158d00045e9e93_motion_2
+      camera: camera.ekran_h264_noaudio_720x480
+      delay: 10
+      notification_title: Обнаружено движение!
+      notification_message: Обнаружено движение в прихожей
+      notify_device: 1b89361365f288b7ac2133ccc0b23b3c
+      is_ios: true
+- id: '1615846694326'
+  alias: Обнаружение низкого уровня заряда батареи и уведомление для всех датчиков
+    батареи
+  description: ''
+  use_blueprint:
+    path: sbyx/low-battery-level-detection-notification-for-all-battery-sensors.yaml
+    input:
+      time: '10:00:00'
+      exclude:
+        device_id:
+        - 1b89361365f288b7ac2133ccc0b23b3c
+        - 89c40a61332d2c134ef1dcd51f92eb58
+        - 91652acae16489141cc62525e484b5f1
+        - b9c5c59c18db11eba25fcba1685c1d4d
+        - 90d15cf14235481f5180b7edb9db34f5
+      actions:
+      - service: telegram_bot.send_message
+        data:
+          message: ВНИМАНИЕ!!! Проверьте заряд батареи датчиков!!!
+- id: '1615970728718'
+  alias: Выключение бра спальня (Вариант 1)
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_off
+    device_id: 74644b9f789028aabddda386811ba37d
+    entity_id: switch.pravyi_svet
+    domain: switch
+  condition:
+  - condition: device
+    type: is_off
+    device_id: 4d913f3e74ab7d47d8f613c3a972cd12
+    entity_id: switch.levyi_svet
+    domain: switch
+  action:
+  - type: turn_off
+    device_id: 2b82646fa521fcce119094bd6cd6ed91
+    entity_id: switch.0x158d0005c1a9cf_channel_2
+    domain: switch
+  mode: single
+- id: '1615970771937'
+  alias: Выключение бра спальня (Вариант 2)
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_off
+    device_id: 4d913f3e74ab7d47d8f613c3a972cd12
+    entity_id: switch.levyi_svet
+    domain: switch
+  condition:
+  - condition: device
+    type: is_off
+    device_id: 74644b9f789028aabddda386811ba37d
+    entity_id: switch.pravyi_svet
+    domain: switch
+  action:
+  - type: turn_off
+    device_id: 2b82646fa521fcce119094bd6cd6ed91
+    entity_id: switch.0x158d0005c1a9cf_channel_2
+    domain: switch
+  mode: single
+- id: '1617520616545'
+  alias: Выключение телевизора спальня
+  description: ''
+  trigger:
+  - platform: time
+    at: 01:00
+  condition:
+  - condition: state
+    entity_id: media_player.samsung_tv_spalnia
+    state: 'on'
+  action:
+  - service: remote.send_command
+    data:
+      entity_id: remote.rm_pro_remote
+      device: samsung
+      command: ON/OFF
+  mode: restart
+- id: '1618147628811'
+  alias: Закрыть/открыть холодную воду
+  description: ''
+  trigger:
+  - platform: device
+    device_id: 66d3f3968ed3427c84dc42ccfed5f025
+    domain: xiaomi_gateway3
+    type: button
+    action: single
+  condition: []
+  action:
+  - type: toggle
+    device_id: f5088de956fe32f50abf9e1adac82c8d
+    entity_id: switch.kholodnaia_voda
+    domain: switch
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: switch.kholodnaia_voda
+        state: 'off'
+      sequence:
+      - service: tts.reversotts_say
+        data:
+          entity_id: media_player.ekran
+          message: Внимание. Открываю холодную воду.
+    - conditions:
+      - condition: state
+        entity_id: switch.kholodnaia_voda
+        state: 'on'
+      sequence:
+      - service: tts.reversotts_say
+        data:
+          entity_id: media_player.ekran
+          message: 'Внимание. Закрываю холодную воду. '
+    default: []
+  mode: restart
+- id: '1618151621615'
+  alias: Протечка воды
+  description: ''
+  trigger:
+  - type: moist
+    platform: device
+    device_id: 40dfae3d0f8bd61110f3df3e48a5fbe5
+    entity_id: binary_sensor.0x158d00049df2f4_moisture
+    domain: binary_sensor
+  - type: moist
+    platform: device
+    device_id: 10f22f7e9465ebf53649db720c18f2e6
+    entity_id: binary_sensor.0x158d00049de7c4_moisture
+    domain: binary_sensor
+  condition: []
+  action:
+  - type: turn_off
+    device_id: f5088de956fe32f50abf9e1adac82c8d
+    entity_id: switch.kholodnaia_voda
+    domain: switch
+  mode: restart
+- id: '1618298542204'
+  alias: 'Свет ванная: включить'
+  description: ''
+  trigger:
+  - type: motion
+    platform: device
+    device_id: 6375998d37ebbac58e003a828e2d62e2
+    entity_id: binary_sensor.0x158d000450c0dc_motion
+    domain: binary_sensor
+  - type: opened
+    platform: device
+    device_id: 3912f707292654220a97b2163e89c6cf
+    entity_id: binary_sensor.0x158d00047db412_contact
+    domain: binary_sensor
+  - platform: device
+    type: turned_on
+    device_id: bd59dedd7afec387578becef19eef079
+    entity_id: switch.0x158d0004551ef0_channel_1
+    domain: switch
+  - type: opened
+    platform: device
+    device_id: 3912f707292654220a97b2163e89c6cf
+    entity_id: binary_sensor.0x158d00047db412_contact
+    domain: binary_sensor
+  condition: []
+  action:
+  - type: turn_on
+    device_id: bd59dedd7afec387578becef19eef079
+    entity_id: switch.0x158d0004551ef0_channel_1
+    domain: switch
+  - service: timer.cancel
+    target:
+      entity_id:
+      - timer.vkliuchenie_svet_vannaia
+      - timer.vykliuchenie_svet_vannaia_1
+      - timer.vykliuchit_svet_vanaia_45
+    data: {}
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 3
+      milliseconds: 0
+  - service: timer.start
+    data:
+      duration: '0'
+    target:
+      entity_id:
+      - timer.vkliuchenie_svet_vannaia
+  - choose:
+    - conditions:
+      - type: is_no_motion
+        condition: device
+        device_id: 6375998d37ebbac58e003a828e2d62e2
+        entity_id: binary_sensor.0x158d000450c0dc_motion
+        domain: binary_sensor
+      - type: is_open
+        condition: device
+        device_id: b98469284f6885dbd65897b4a0f48105
+        entity_id: binary_sensor.dveri_dushevaia_contact
+        domain: binary_sensor
+      - type: is_open
+        condition: device
+        device_id: 3912f707292654220a97b2163e89c6cf
+        entity_id: binary_sensor.0x158d00047db412_contact
+        domain: binary_sensor
+      sequence: []
+    - conditions: []
+      sequence:
+      - wait_for_trigger:
+        - platform: state
+          entity_id: binary_sensor.super_motion_vannay
+          to: 'off'
+      - choose:
+        - conditions:
+          - type: is_not_open
+            condition: device
+            device_id: b98469284f6885dbd65897b4a0f48105
+            entity_id: binary_sensor.dveri_dushevaia_contact
+            domain: binary_sensor
+          sequence:
+          - service: timer.start
+            data:
+              duration: '0'
+            target:
+              entity_id:
+              - timer.vykliuchit_svet_vanaia_45
+          - delay:
+              hours: 0
+              minutes: 45
+              seconds: 0
+              milliseconds: 0
+        - conditions:
+          - type: is_open
+            condition: device
+            device_id: 3912f707292654220a97b2163e89c6cf
+            entity_id: binary_sensor.0x158d00047db412_contact
+            domain: binary_sensor
+          sequence:
+          - service: timer.start
+            data:
+              duration: '0'
+            target:
+              entity_id:
+              - timer.vykliuchenie_svet_vannaia_1
+          - delay:
+              hours: 0
+              minutes: 1
+              seconds: 30
+              milliseconds: 0
+        - conditions:
+          - type: is_not_open
+            condition: device
+            device_id: 3912f707292654220a97b2163e89c6cf
+            entity_id: binary_sensor.0x158d00047db412_contact
+            domain: binary_sensor
+          sequence:
+          - service: timer.start
+            data:
+              duration: '0'
+            target:
+              entity_id:
+              - timer.vykliuchit_svet_vanaia_45
+          - delay:
+              hours: 0
+              minutes: 45
+              seconds: 0
+              milliseconds: 0
+        default: []
+    default: []
+  - type: turn_off
+    device_id: bd59dedd7afec387578becef19eef079
+    entity_id: switch.0x158d0004551ef0_channel_1
+    domain: switch
+  - type: turn_off
+    device_id: c1c65ec4e4bf8294f31067107ab22e87
+    entity_id: switch.zerkalo_vannaia
+    domain: switch
+  mode: restart
+- id: '1619358256864'
+  alias: 'Стиральная машина: выключить 00:00'
+  description: ''
+  trigger:
+  - platform: time
+    at: 00:00
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 8003fa1121b5c084820215a8cbe3e70f
+    entity_id: switch.stiralnaia_mashina
+    domain: switch
+  mode: single
+- id: '1621852988786'
+  alias: Свет кладовая включаеться
+  description: ''
+  trigger:
+  - type: opened
+    platform: device
+    device_id: ee2e1b0bf3ac23bff061555efd930c24
+    entity_id: binary_sensor.dver_kladovaia_contact
+    domain: binary_sensor
+  condition: []
+  action:
+  - type: turn_on
+    device_id: 1674b7995324c92e81ec37ce8ddf84e2
+    entity_id: switch.svet_kladovaia_3
+    domain: switch
+  mode: restart
+- id: '1622091704369'
+  alias: Солнце заходит
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+  condition: []
+  action:
+  - service: media_extractor.play_media
+    data:
+      media_content_id: http://192.168.1.100:8123/local/dingdong.mp3
+      media_content_type: MUSIC
+    target:
+      entity_id: media_player.ekran
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
+  - service: tts.reversotts_say
+    data:
+      entity_id: media_player.ekran
+      message: Солнце заходит
+  mode: restart
+- id: '1622098495024'
+  alias: Ночник выключение
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_off
+    device_id: 1ac8b5a3c75c2f79b715de77068fa6ff
+    entity_id: switch.nochnik_nad_kreslom
+    domain: switch
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 17b74450cba20b4e4407d771aa5a6be4
+    entity_id: switch.nochnik
+    domain: switch
+  mode: restart
+- id: '1622970713412'
+  alias: Выключение свет столовая
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_off
+    device_id: a3e592bd3a09956342633488b8cf064b
+    entity_id: switch.svet_stolovaia_1_3
+    domain: switch
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 17f2a72e8cf07cbcf16681806975e604
+    entity_id: switch.svet_stolovaia_2
+    domain: switch
+  mode: restart
+- id: '1626100740649'
+  alias: Входная дверь открыта
+  description: ''
+  trigger:
+  - type: opened
+    platform: device
+    device_id: 4bf8f887399a7b9e269c4d59157e069c
+    entity_id: binary_sensor.0x158d0006c04934_contact
+    domain: binary_sensor
+  condition: []
+  action:
+  - delay:
+      hours: 0
+      minutes: 5
+      seconds: 0
+      milliseconds: 0
+  - choose:
+    - conditions:
+      - type: is_open
+        condition: device
+        device_id: 4bf8f887399a7b9e269c4d59157e069c
+        entity_id: binary_sensor.0x158d0006c04934_contact
+        domain: binary_sensor
+      sequence:
+      - service: media_extractor.play_media
+        target:
+          entity_id: media_player.ekran
+        data:
+          media_content_type: MUSIC
+          media_content_id: http://192.168.1.100:8123/local/dingdong.mp3
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 1
+          milliseconds: 0
+      - service: tts.reversotts_say
+        data:
+          message: Внимание. Входная дверь открыта. Пожалуйста закройте входную дверь.
+          entity_id: media_player.ekran
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 1
+          milliseconds: 0
+      - service: tts.reversotts_say
+        data:
+          message: Внимание. Входная дверь открыта. Пожалуйста закройте входную дверь.
+          entity_id: media_player.yandex_station_ff98f02996413db4a1b03c2b
+    default: []
+  mode: restart
+- id: '1626167809259'
+  alias: Окно балкон в открытом состоянии
+  description: ''
+  trigger:
+  - type: opened
+    platform: device
+    device_id: 7e7353ebf9b8415546e0c0f62db65af3
+    entity_id: binary_sensor.okno_balkon_contact
+    domain: binary_sensor
+  condition: []
+  action:
+  - service: media_extractor.play_media
+    data:
+      media_content_id: http://192.168.1.100:8123/local/dingdong.mp3
+      media_content_type: MUSIC
+    target:
+      entity_id: media_player.ekran
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
+  - service: tts.reversotts_say
+    data:
+      entity_id: media_player.ekran
+      message: Открыто окно балкона
+  mode: restart
+- id: '1626507217250'
+  alias: Андрей дома
+  description: ''
+  trigger:
+  - platform: zone
+    entity_id: person.andreu
+    zone: zone.home
+    event: enter
+  condition: []
+  action:
+  - service: media_extractor.play_media
+    data:
+      entity_id: media_player.ekran
+      media_content_id: http://192.168.1.100:8123/local/dingdong.mp3
+      media_content_type: audio/mp3
+    entity_id: media_player.ekran
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
+  - service: tts.reversotts_say
+    data:
+      entity_id: media_player.ekran
+      message: Андрей около дома.
+  mode: restart
+- id: '1626507427486'
+  alias: Таня дома
+  description: ''
+  trigger:
+  - platform: zone
+    entity_id: person.tania
+    zone: zone.home
+    event: enter
+  condition: []
+  action:
+  - service: media_extractor.play_media
+    data:
+      entity_id: media_player.ekran
+      media_content_id: http://192.168.1.100:8123/local/dingdong.mp3
+      media_content_type: audio/mp3
+    entity_id: media_player.ekran
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
+  - service: tts.reversotts_say
+    data:
+      entity_id: media_player.ekran
+      message: Таня около дома.
+  mode: restart
+- id: '1626513009584'
+  alias: Даниил дома
+  description: ''
+  trigger:
+  - platform: zone
+    entity_id: person.daniil
+    zone: zone.home
+    event: enter
+  condition: []
+  action:
+  - service: media_extractor.play_media
+    data:
+      entity_id: media_player.ekran
+      media_content_id: http://192.168.1.100:8123/local/dingdong.mp3
+      media_content_type: audio/mp3
+    entity_id: media_player.ekran
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
+  - service: tts.reversotts_say
+    data:
+      entity_id: media_player.ekran
+      message: Даниил около дома.
+  mode: restart
+- id: '1626969727215'
+  alias: Входная дверь колокольчик
+  description: ''
+  trigger:
+  - type: opened
+    platform: device
+    device_id: 4bf8f887399a7b9e269c4d59157e069c
+    entity_id: binary_sensor.0x158d0006c04934_contact
+    domain: binary_sensor
+  condition: []
+  action:
+  - service: media_extractor.play_media
+    target:
+      entity_id: media_player.ekran
+    data:
+      media_content_id: http://192.168.1.100:8123/local/Colocol.mp3
+      media_content_type: MUSIC
+  mode: restart
+- id: '1628175516606'
+  alias: Свет кладовая выключился
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: 1674b7995324c92e81ec37ce8ddf84e2
+    entity_id: switch.svet_kladovaia_3
+    domain: switch
+  condition: []
+  action:
+  - service: timer.cancel
+    target:
+      entity_id: timer.vykliuchit_svet_kladovaia
+  - service: timer.start
+    data:
+      duration: '0'
+    target:
+      entity_id: timer.vykliuchit_svet_kladovaia
+  - delay:
+      hours: 0
+      minutes: 15
+      seconds: 0
+      milliseconds: 0
+  - type: turn_off
+    device_id: 1674b7995324c92e81ec37ce8ddf84e2
+    entity_id: switch.svet_kladovaia_3
+    domain: switch
+  mode: restart
+- id: '1630561377483'
+  alias: Вентилятор ванная включается
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: bd59dedd7afec387578becef19eef079
+    entity_id: switch.0x158d0004551ef0_channel_2
+    domain: switch
+  condition: []
+  action:
+  - delay:
+      hours: 0
+      minutes: 30
+      seconds: 0
+      milliseconds: 0
+  - type: turn_off
+    device_id: bd59dedd7afec387578becef19eef079
+    entity_id: switch.0x158d0004551ef0_channel_2
+    domain: switch
+  mode: restart
+- id: '1631093813150'
+  alias: Левый свет включаеться
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: 4d913f3e74ab7d47d8f613c3a972cd12
+    entity_id: switch.levyi_svet
+    domain: switch
+  condition: []
+  action:
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 3
+      milliseconds: 0
+  - type: turn_on
+    device_id: f5affec3378746b125865da115ffdd3f
+    entity_id: light.levyi_svet_1
+    domain: light
+    brightness_pct: 100
+  mode: restart
+- id: '1631100622637'
+  alias: Датчик дыма обнаруживает дым
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.54ef44e36de8_smoke
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - service: media_extractor.play_media
+    data:
+      media_content_id: http://192.168.1.100:8123/local/dingdong.mp3
+      media_content_type: MUSIC
+    target:
+      entity_id: media_player.ekran
+      device_id: 1a889b2913d3cf0829bb73f53f54df1c
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
+  - service: telegram_bot.send_message
+    data:
+      message: ВНИМАНИЕ!!! Датчик дыма обнаружил дым!!!
+  - service: telegram_bot.send_message
+    data:
+      message: ВНИМАНИЕ!!! Датчик дыма обнаружил дым!!!
+  - service: telegram_bot.send_message
+    data:
+      message: ВНИМАНИЕ!!! Датчик дыма обнаружил дым!!!
+  - service: tts.reversotts_say
+    data:
+      entity_id: media_player.ekran
+      message: ВНИМАНИЕ!!! Датчик дыма обнаружил дым!!!
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 3
+      milliseconds: 0
+  - service: media_player.play_media
+    target:
+      device_id: 1a889b2913d3cf0829bb73f53f54df1c
+    data:
+      media_content_type: text
+      media_content_id: ВНИМАНИЕ!!! Датчик дыма обнаружил дым!!!
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 3
+      milliseconds: 0
+  - service: tts.reversotts_say
+    data:
+      entity_id: media_player.ekran
+      message: ВНИМАНИЕ!!! Датчик дыма обнаружил дым!!!
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 3
+      milliseconds: 0
+  - service: tts.reversotts_say
+    data:
+      entity_id: media_player.ekran
+      message: ВНИМАНИЕ!!! Датчик дыма обнаружил дым!!!
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 3
+      milliseconds: 0
+  - service: media_extractor.play_media
+    data:
+      media_content_id: http://192.168.1.100:8123/local/alarm.mp3
+      media_content_type: MUSIC
+    target:
+      entity_id: media_player.ekran
+  mode: restart
+- id: '1631280839414'
+  alias: Пылесосик выключить
+  description: ''
+  trigger:
+  - platform: time
+    at: '20:00'
+  condition: []
+  action:
+  - type: turn_off
+    device_id: a48b6aeea56c55af729a60366b59d5db
+    entity_id: switch.pylesosik
+    domain: switch
+  mode: restart
+- id: '1631280842273'
+  alias: Пылесосик включить
+  description: ''
+  trigger:
+  - platform: time
+    at: 08:00
+  condition: []
+  action:
+  - type: turn_on
+    device_id: a48b6aeea56c55af729a60366b59d5db
+    entity_id: switch.pylesosik
+    domain: switch
+  mode: restart
+- id: '1632128591575'
+  alias: Свет гардероб включаеться
+  description: ''
+  trigger:
+  - type: motion
+    platform: device
+    device_id: 2a765c5df5be86348ba33fc39ae0be44
+    entity_id: binary_sensor.dvizhenie_garderob_occupancy
+    domain: binary_sensor
+  condition: []
+  action:
+  - type: turn_on
+    device_id: 64de189d515756113eacab0fbcae26ce
+    entity_id: switch.svet_garderob_2
+    domain: switch
+  - wait_for_trigger:
+    - type: no_motion
+      platform: device
+      device_id: 2a765c5df5be86348ba33fc39ae0be44
+      entity_id: binary_sensor.dvizhenie_garderob_occupancy
+      domain: binary_sensor
+      for:
+        hours: 0
+        minutes: 1
+        seconds: 0
+  - type: turn_off
+    device_id: 64de189d515756113eacab0fbcae26ce
+    entity_id: switch.svet_garderob_2
+    domain: switch
+  mode: restart
+- id: '1632302958402'
+  alias: Посудомоечная машина выключаеться
+  description: ''
+  trigger:
+  - platform: time
+    at: '23:50'
+  condition: []
+  action:
+  - type: turn_off
+    device_id: b4f5b75e6b2ec3f37cdffa89dbb32a2d
+    entity_id: switch.posudomoechnaia_mashina
+    domain: switch
+  mode: restart
+- id: '1634840635241'
+  alias: Свет кладовая выключаеться (Дверь)
+  description: ''
+  trigger:
+  - type: not_opened
+    platform: device
+    device_id: ee2e1b0bf3ac23bff061555efd930c24
+    entity_id: binary_sensor.dver_kladovaia_contact
+    domain: binary_sensor
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 1674b7995324c92e81ec37ce8ddf84e2
+    entity_id: switch.svet_kladovaia_3
+    domain: switch
+  mode: restart
+- id: '1635624707311'
+  alias: Управление термоголовкама в будни (08:00)
+  description: ''
+  trigger:
+  - platform: time
+    at: 08:00
+  condition:
+  - condition: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+  action:
+  - service: script.1641421021480
+  mode: restart
+- id: '1635624810039'
+  alias: Управление термоголовкама в (16:00)
+  description: ''
+  trigger:
+  - platform: time
+    at: '16:00'
+  condition: []
+  action:
+  - service: script.1641422002931
+  - delay:
+      hours: 0
+      minutes: 10
+      seconds: 0
+      milliseconds: 0
+  - service: script.1641420960919
+  mode: restart
+- id: '1636037598220'
+  alias: Включение лампы на балконе
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+  condition: []
+  action:
+  - type: turn_on
+    device_id: 30fbc8cafa5353c1779b4b09c98b38aa
+    entity_id: switch.lampa_balkon
+    domain: switch
+  mode: restart
+- id: '1636037664952'
+  alias: Выключение лампы на балконе
+  description: ''
+  trigger:
+  - platform: time
+    at: 01:00
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 30fbc8cafa5353c1779b4b09c98b38aa
+    entity_id: switch.lampa_balkon
+    domain: switch
+  mode: restart
+- id: '1637143360473'
+  alias: Перезапуск системы
+  description: ''
+  trigger:
+  - platform: time
+    at: 04:00
+  condition:
+  - condition: time
+    weekday:
+    - wed
+    - sun
+  action:
+  - service: homeassistant.restart
+  mode: restart
+- id: '1640030329307'
+  alias: Открыть жалюзи
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_boolean.zhaliuzi
+    to: 'on'
+  condition: []
+  action:
+  - device_id: 43678a8a3f4b09bb3021dc6776023a45
+    domain: cover
+    entity_id: cover.zhaliuzi
+    type: set_position
+    position: 0
+  mode: restart
+- id: '1640030371351'
+  alias: Закрыть жалюзи
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_boolean.zhaliuzi
+    to: 'off'
+  condition: []
+  action:
+  - device_id: 43678a8a3f4b09bb3021dc6776023a45
+    domain: cover
+    entity_id: cover.zhaliuzi
+    type: set_position
+    position: 100
+  mode: restart
+- id: '1640620178816'
+  alias: Выключить лампа на балконе
+  description: ''
+  trigger:
+  - type: opened
+    platform: device
+    device_id: 7e7353ebf9b8415546e0c0f62db65af3
+    entity_id: binary_sensor.okno_balkon_contact
+    domain: binary_sensor
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 30fbc8cafa5353c1779b4b09c98b38aa
+    entity_id: switch.lampa_balkon
+    domain: switch
+  mode: restart
+- id: '1640620254735'
+  alias: Включить лампа на балконе  от окно балкон
+  description: ''
+  trigger:
+  - type: not_opened
+    platform: device
+    device_id: 7e7353ebf9b8415546e0c0f62db65af3
+    entity_id: binary_sensor.okno_balkon_contact
+    domain: binary_sensor
+  condition:
+  - condition: state
+    entity_id: binary_sensor.zadannaia_noch_time
+    state: 'on'
+  action:
+  - type: turn_on
+    device_id: 30fbc8cafa5353c1779b4b09c98b38aa
+    entity_id: switch.lampa_balkon
+    domain: switch
+  mode: restart
+- id: '1641993996237'
+  alias: 'Обогрев под утро термоголовка '
+  description: ''
+  trigger:
+  - platform: time
+    at: 05:00
+  condition: []
+  action:
+  - service: script.1641422002931
+    data: {}
+  - delay:
+      hours: 1
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+  - service: script.1641420960919
+    data: {}
+  mode: restart
+- id: '1642285835394'
+  alias: Автоматизация обновления состояния zigbee устройсва Ночник
+  trigger:
+  - platform: time_pattern
+    hours: '1'
+  action:
+  - service: mqtt.publish
+    data:
+      topic: zigbee2mqtt/0x0c4314fffe60a390/get
+      payload: '{"state": ""}'
+  initial_state: true
+- id: '1642286291002'
+  alias: Автоматизация обновления состояния zigbee устройсва Свет над столом 1
+  description: ''
+  trigger:
+  - platform: time_pattern
+    hours: '1'
+    minutes: '10'
+  condition: []
+  action:
+  - service: mqtt.publish
+    data:
+      topic: zigbee2mqtt/0x804b50fffeab63eb/get
+      payload: '{"state": ""}'
+  mode: single
+  initial_state: true
+- id: '1642286416157'
+  alias: Автоматизация обновления состояния zigbee устройсва Правый свет
+  description: ''
+  trigger:
+  - platform: time_pattern
+    hours: '1'
+    minutes: '20'
+  condition: []
+  action:
+  - service: mqtt.publish
+    data:
+      topic: zigbee2mqtt/0x0c4314fffe60a3be/get
+      payload: '{"state": ""}'
+  mode: single
+  initial_state: true
+- id: '1649841954219'
+  alias: Ночной свет в спальне
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_button.nochnoi_svet_v_spalne
+  condition: []
+  action:
+  - type: turn_on
+    device_id: f5affec3378746b125865da115ffdd3f
+    entity_id: light.levyi_svet_1
+    domain: light
+    brightness_pct: 10
+  mode: restart
+- id: '1651841451645'
+  alias: Синхронизация включения свет над столом
+  trigger:
+  - platform: state
+    entity_id:
+    - light.svet_nad_stolom
+    to: 'on'
+  - platform: state
+    entity_id:
+    - light.svet_nad_stolom_1
+    to: 'on'
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: light.svet_nad_stolom
+        state: 'on'
+      - condition: state
+        entity_id: light.svet_nad_stolom_1
+        state: 'off'
+      sequence:
+      - service: light.turn_on
+        data: {}
+        target:
+          entity_id: light.svet_nad_stolom_1
+    - conditions:
+      - condition: state
+        entity_id: light.svet_nad_stolom_1
+        state: 'on'
+      - condition: state
+        entity_id: light.svet_nad_stolom
+        state: 'off'
+      sequence:
+      - service: light.turn_on
+        data: {}
+        target:
+          entity_id: light.svet_nad_stolom
+  initial_state: enable
+  mode: restart
+- id: '1651844004492'
+  alias: Синхронизация выключения свет над столом
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - light.svet_nad_stolom
+    to: 'off'
+  - platform: state
+    entity_id:
+    - light.svet_nad_stolom_1
+    to: 'off'
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: light.svet_nad_stolom
+        state: 'off'
+      - condition: state
+        entity_id: light.svet_nad_stolom_1
+        state: 'on'
+      sequence:
+      - service: light.turn_off
+        data: {}
+        target:
+          entity_id: light.svet_nad_stolom_1
+    - conditions:
+      - condition: state
+        entity_id: light.svet_nad_stolom_1
+        state: 'off'
+      - condition: state
+        entity_id: light.svet_nad_stolom
+        state: 'on'
+      sequence:
+      - service: light.turn_off
+        data: {}
+        target:
+          entity_id: light.svet_nad_stolom
+  mode: restart
+  initial_state: enable

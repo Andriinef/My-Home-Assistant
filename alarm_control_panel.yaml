@@ -1,0 +1,5 @@
+  - platform: manual
+    name: home_alarm
+    code: !secret alarm_control
+    arming_time: 250
+    delay_time: 90

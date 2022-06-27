@@ -1,0 +1,360 @@
+'1605432871866':
+  alias: Голосовое сообщение
+  sequence:
+  - service: tts.reversotts_say
+    data:
+      entity_id: media_player.ekran
+      message: 'привет '
+  mode: single
+'1606107448387':
+  alias: Broadlink обучение
+  sequence:
+  - service: remote.learn_command
+    data:
+      entity_id: remote.rm_pro_remote
+      device: samsung
+      command: ON/OFF
+      alternative: true
+      timeout: 30
+    entity_id: remote.rm_pro_remote
+  mode: single
+'1608371668907':
+  alias: 'Notify: Тревога'
+  sequence:
+  - service: notify.mobile_app_ekran
+    data:
+      message: тревога
+  mode: single
+'1613636511987':
+  alias: Выключение света
+  sequence:
+  - service: light.turn_off
+    data:
+      entity_id: all
+    entity_id: all
+  mode: single
+'1615370833984':
+  alias: Запись с камеры Экрана
+  sequence:
+  - service: camera.record
+    data:
+      filename: /config/www/cam_captures/ekran.mp4
+      duration: 10
+    target:
+      entity_id:
+      - camera.ekran_h264_ulaw_720x480
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 5
+      milliseconds: 0
+  - service: telegram_bot.send_video
+    data:
+      file: /config/www/cam_captures/ekran.mp4
+  mode: restart
+  icon: hass:video
+'1621194764648':
+  sequence:
+  - service: camera.snapshot
+    target:
+      entity_id: camera.ekran_h264_noaudio_720x480
+    data:
+      filename: /config/www/cam_captures/ekran.jpg
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 5
+      milliseconds: 0
+  - service: telegram_bot.send_photo
+    data:
+      file: /config/www/cam_captures/ekran.jpg
+  mode: restart
+  alias: Сделать фото Экран
+'1628434961195':
+  sequence:
+  - service: media_player.play_media
+    data:
+      media_content_type: dialog
+      media_content_id: Привет
+    target:
+      entity_id: media_player.yandex_station
+  mode: single
+  alias: Алиса говорит
+'1628435714693':
+  sequence:
+  - service: media_player.play_media
+    data:
+      media_content_id: Внимание! Важное сообщение...
+      media_content_type: text
+      extra:
+        volume_level: 0.6
+    target:
+      entity_id: media_player.yandex_station
+  mode: single
+  alias: Алиса говорит громко
+tts_yandex_station_say:
+  alias: TTS Яндекс колонка
+  fields:
+    device:
+      name: Выберите свою колонку
+      required: true
+      selector:
+        entity:
+    volume:
+      name: Громкость колонки Яндекс (0...10)
+      example: 5
+      required: true
+      selector:
+        number:
+          mode: slider
+          min: 0
+          max: 10
+    message:
+      name: Голосовое сообщение от колонки Яндекс
+      example: Укажите любой текст
+      required: true
+      selector:
+        text:
+  sequence:
+  - service: tts.yandex_station_say
+    data:
+      entity_id: '{{ device }}'
+      message: '{{ message }}'
+      options:
+        volume_level: '{{ volume|int / 10 }}'
+  mode: single
+'1641420960919':
+  sequence:
+  - device_id: 4d1a29d3dcff0cb76a575e99d0c2f8d2
+    domain: climate
+    entity_id: climate.termogolovka_gostinaia
+    type: set_hvac_mode
+    hvac_mode: auto
+  - device_id: f08c02eefc55d7deed677988b2b9b104
+    domain: climate
+    entity_id: climate.termogolovka_zal
+    type: set_hvac_mode
+    hvac_mode: auto
+  - device_id: b1cc44a5295a3dafbbb78fc82626d61f
+    domain: climate
+    entity_id: climate.termogolovka_kukhnia
+    type: set_hvac_mode
+    hvac_mode: auto
+  - device_id: 14a0173ea4b2b225d44c5e1ff74c51b4
+    domain: climate
+    entity_id: climate.termogolovka_spalnia
+    type: set_hvac_mode
+    hvac_mode: auto
+  - device_id: f08c02eefc55d7deed677988b2b9b104
+    domain: climate
+    entity_id: climate.termogolovka_zal
+    type: set_preset_mode
+    preset_mode: comfort
+  - device_id: b1cc44a5295a3dafbbb78fc82626d61f
+    domain: climate
+    entity_id: climate.termogolovka_kukhnia
+    type: set_preset_mode
+    preset_mode: comfort
+  - device_id: 4d1a29d3dcff0cb76a575e99d0c2f8d2
+    domain: climate
+    entity_id: climate.termogolovka_gostinaia
+    type: set_preset_mode
+    preset_mode: comfort
+  - device_id: 14a0173ea4b2b225d44c5e1ff74c51b4
+    domain: climate
+    entity_id: climate.termogolovka_spalnia
+    type: set_preset_mode
+    preset_mode: comfort
+  mode: restart
+  alias: Комфортная температура
+  icon: mdi:home-thermometer-outline
+'1641421021480':
+  alias: Экономичная температура
+  sequence:
+  - device_id: 4d1a29d3dcff0cb76a575e99d0c2f8d2
+    domain: climate
+    entity_id: climate.termogolovka_gostinaia
+    type: set_hvac_mode
+    hvac_mode: auto
+  - device_id: f08c02eefc55d7deed677988b2b9b104
+    domain: climate
+    entity_id: climate.termogolovka_zal
+    type: set_hvac_mode
+    hvac_mode: auto
+  - device_id: b1cc44a5295a3dafbbb78fc82626d61f
+    domain: climate
+    entity_id: climate.termogolovka_kukhnia
+    type: set_hvac_mode
+    hvac_mode: auto
+  - device_id: 4d1a29d3dcff0cb76a575e99d0c2f8d2
+    domain: climate
+    entity_id: climate.termogolovka_gostinaia
+    type: set_preset_mode
+    preset_mode: eco
+  - device_id: f08c02eefc55d7deed677988b2b9b104
+    domain: climate
+    entity_id: climate.termogolovka_zal
+    type: set_preset_mode
+    preset_mode: eco
+  - device_id: b1cc44a5295a3dafbbb78fc82626d61f
+    domain: climate
+    entity_id: climate.termogolovka_kukhnia
+    type: set_preset_mode
+    preset_mode: eco
+  - device_id: 14a0173ea4b2b225d44c5e1ff74c51b4
+    domain: climate
+    entity_id: climate.termogolovka_spalnia
+    type: set_hvac_mode
+    hvac_mode: auto
+  - device_id: 14a0173ea4b2b225d44c5e1ff74c51b4
+    domain: climate
+    entity_id: climate.termogolovka_spalnia
+    type: set_preset_mode
+    preset_mode: eco
+  mode: restart
+  icon: mdi:home-lightning-bolt
+'1641422002931':
+  sequence:
+  - device_id: 4d1a29d3dcff0cb76a575e99d0c2f8d2
+    domain: climate
+    entity_id: climate.termogolovka_gostinaia
+    type: set_hvac_mode
+    hvac_mode: heat
+  - device_id: f08c02eefc55d7deed677988b2b9b104
+    domain: climate
+    entity_id: climate.termogolovka_zal
+    type: set_hvac_mode
+    hvac_mode: heat
+  - device_id: b1cc44a5295a3dafbbb78fc82626d61f
+    domain: climate
+    entity_id: climate.termogolovka_kukhnia
+    type: set_hvac_mode
+    hvac_mode: heat
+  - device_id: 14a0173ea4b2b225d44c5e1ff74c51b4
+    domain: climate
+    entity_id: climate.termogolovka_spalnia
+    type: set_hvac_mode
+    hvac_mode: heat
+  mode: restart
+  icon: mdi:home-floor-0
+  alias: Обогрев
+'1641423775036':
+  sequence:
+  - device_id: 4d1a29d3dcff0cb76a575e99d0c2f8d2
+    domain: climate
+    entity_id: climate.termogolovka_gostinaia
+    type: set_hvac_mode
+    hvac_mode: auto
+  - device_id: f08c02eefc55d7deed677988b2b9b104
+    domain: climate
+    entity_id: climate.termogolovka_zal
+    type: set_hvac_mode
+    hvac_mode: auto
+  - device_id: b1cc44a5295a3dafbbb78fc82626d61f
+    domain: climate
+    entity_id: climate.termogolovka_kukhnia
+    type: set_hvac_mode
+    hvac_mode: auto
+  - device_id: 14a0173ea4b2b225d44c5e1ff74c51b4
+    domain: climate
+    entity_id: climate.termogolovka_spalnia
+    type: set_hvac_mode
+    hvac_mode: auto
+  - device_id: 4d1a29d3dcff0cb76a575e99d0c2f8d2
+    domain: climate
+    entity_id: climate.termogolovka_gostinaia
+    type: set_preset_mode
+    preset_mode: manual
+  - device_id: f08c02eefc55d7deed677988b2b9b104
+    domain: climate
+    entity_id: climate.termogolovka_zal
+    type: set_preset_mode
+    preset_mode: manual
+  - device_id: b1cc44a5295a3dafbbb78fc82626d61f
+    domain: climate
+    entity_id: climate.termogolovka_kukhnia
+    type: set_preset_mode
+    preset_mode: manual
+  - device_id: 14a0173ea4b2b225d44c5e1ff74c51b4
+    domain: climate
+    entity_id: climate.termogolovka_spalnia
+    type: set_preset_mode
+    preset_mode: manual
+  mode: restart
+  icon: mdi:home-edit
+  alias: Ручной режим температуры
+'1643407535316':
+  alias: Экономичная температура спальни на 1 час
+  sequence:
+  - device_id: f08c02eefc55d7deed677988b2b9b104
+    domain: climate
+    entity_id: climate.termogolovka_spalnia
+    type: set_hvac_mode
+    hvac_mode: auto
+  - device_id: f08c02eefc55d7deed677988b2b9b104
+    domain: climate
+    entity_id: climate.termogolovka_spalnia
+    type: set_preset_mode
+    preset_mode: eco
+  - delay:
+      hours: 1
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+  - device_id: f08c02eefc55d7deed677988b2b9b104
+    domain: climate
+    entity_id: climate.termogolovka_spalnia
+    type: set_preset_mode
+    preset_mode: comfort
+  mode: restart
+  icon: mdi:home-thermometer
+'1':
+  alias: 'Экономичная температура гостиная на 1 час '
+  sequence:
+  - device_id: 4d1a29d3dcff0cb76a575e99d0c2f8d2
+    domain: climate
+    entity_id: climate.termogolovka_gostinaia
+    type: set_hvac_mode
+    hvac_mode: auto
+  - device_id: 4d1a29d3dcff0cb76a575e99d0c2f8d2
+    domain: climate
+    entity_id: climate.termogolovka_gostinaia
+    type: set_preset_mode
+    preset_mode: eco
+  - delay:
+      hours: 1
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+  - device_id: 4d1a29d3dcff0cb76a575e99d0c2f8d2
+    domain: climate
+    entity_id: climate.termogolovka_gostinaia
+    type: set_preset_mode
+    preset_mode: comfort
+  mode: restart
+  icon: mdi:home-thermometer
+'1_2':
+  alias: 'Экономичная температура зал на 1 час '
+  sequence:
+  - device_id: 14a0173ea4b2b225d44c5e1ff74c51b4
+    domain: climate
+    entity_id: climate.termogolovka_zal
+    type: set_hvac_mode
+    hvac_mode: auto
+  - device_id: 14a0173ea4b2b225d44c5e1ff74c51b4
+    domain: climate
+    entity_id: climate.termogolovka_zal
+    type: set_preset_mode
+    preset_mode: eco
+  - delay:
+      hours: 1
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+  - device_id: 14a0173ea4b2b225d44c5e1ff74c51b4
+    domain: climate
+    entity_id: climate.termogolovka_zal
+    type: set_preset_mode
+    preset_mode: comfort
+  mode: restart
+  icon: mdi:home-thermometer

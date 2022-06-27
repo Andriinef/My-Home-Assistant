@@ -1,0 +1,53 @@
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+homeassistant: !include homeassistant.yaml
+
+group: !include groups.yaml
+automation: !include automations.yaml
+automation old: !include_dir_merge_list automations
+script: !include scripts.yaml
+script oldt: !include_dir_merge_list script
+scene: !include scenes.yaml
+sensor: !include sensor.yaml
+binary_sensor: !include_dir_merge_list includes/bin_sensor
+#timer: !include includes/timer.yaml
+switch: !include_dir_merge_list includes/switches
+camera: !include camera.yaml
+#select: !include select.yaml
+#recorder: !include recorder.yaml
+tts: !include tts.yaml
+cloud: !include cload.yaml
+media_player: !include media_player.yaml
+telegram_bot: !include telegram_bot.yaml
+notify: !include notify.yaml # поставить в известность
+media_extractor: !include media_extractor.yaml
+remote: !include remote.yaml
+climate: !include climate.yaml
+alarm_control_panel: !include alarm_control_panel.yaml
+http: !include http.yaml
+yandex_smart_home: !include yandex_smart_home.yaml
+google_assistant: !include google_assistant.yaml
+ffmpeg: !include ffmpeg_camera.yaml
+
+# Ручная конфигурация
+# Отображение панели настроек в интерфейсе
+config:
+#Сканирование доступных устройств в сети
+ssdp:
+# Включение официального интерфейса
+frontend:
+  themes: !include_dir_merge_named themes
+# Включение карты
+map:
+# Включение поддержки приложения
+mobile_app:
+# Отслеживание солнца
+sun:
+# API для предоставления информации о системе и ее компонентах
+system_health:
+# Потоковое изображение с камер
+stream:
+#умный пульт:
+smartir:
+

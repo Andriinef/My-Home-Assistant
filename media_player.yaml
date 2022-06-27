@@ -1,0 +1,10 @@
+  - platform: mpd
+    host: 192.168.1.39
+    name: Экран
+    
+#  - platform : smartir
+#    name : Samsung TV
+#    unique_id : bed_room_tv
+#    device_code : 1060
+#    controller_data : remote.rm_pro_remote
+#    power_sensor : binary_sensor.tv_power 
